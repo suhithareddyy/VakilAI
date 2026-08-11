@@ -48,6 +48,10 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.post('/auth/login', { email, password });
     const { token: newToken, user: newUser } = res.data;
     localStorage.setItem('law_advisor_token', newToken);
+    // Set synchronously (not just via the [token] effect) so components that
+    // fetch data on mount right after navigation don't race ahead of it —
+    // the effect can fire after a just-mounted child's own mount effect.
+    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     setToken(newToken);
     setUser(newUser);
     return res.data;
@@ -57,6 +61,7 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.post('/auth/register', userData);
     const { token: newToken, user: newUser } = res.data;
     localStorage.setItem('law_advisor_token', newToken);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     setToken(newToken);
     setUser(newUser);
     return res.data;
