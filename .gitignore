@@ -20,3 +20,6 @@ Thumbs.db
 # Editor/tool local state
 .vscode/
 .claude/
+
+# Unrelated files
+Personal AI Advisor.zip
